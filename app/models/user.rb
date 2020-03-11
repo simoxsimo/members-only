@@ -11,4 +11,16 @@ class User < ApplicationRecord
                        length: { minimum: 6 }
   has_secure_password
   has_many :posts
+  before_create :token_encrypt
+  attr_accessor :token
+
+  def User.new_token
+    SecureRandom.urlsafe_base64 
+  end
+
+  def token_encrypt
+    token_string=User.new_token
+    add_remember_token = Digest::SHA1.hexdigest(token_string)
+    self.remember_token =add_remember_token
+  end
 end
