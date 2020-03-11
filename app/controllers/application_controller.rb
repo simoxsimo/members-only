@@ -1,2 +1,27 @@
 class ApplicationController < ActionController::Base
+  def remember(user)
+    user.token_encrypt
+    cookies.permanent.signed[:user_id] = user.id
+    cookies.permanent[:remember_token] = user.token
+
+  end
+  def current_user
+    if (user_id = session[:user_id])
+      @current_user ||= User.find_by(id: user_id)
+    elsif (user_id = cookies.signed[:user_id])
+      user = User.find_by(id: user_id)
+      @current_user = user
+      session[:user_id] = user.id
+    end
+  end
+  def forget_session(user)
+    user.delete_session_token 
+    cookies.delete(:user_id) 
+    cookies.delete(:remember_token) 
+  end 
+  def logout
+    forget_session(current_user)
+    session.delete(:user_id) 
+    @current_user = nil 
+  end 
 end

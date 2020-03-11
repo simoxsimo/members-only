@@ -19,8 +19,12 @@ class User < ApplicationRecord
   end
 
   def token_encrypt
-    token_string=User.new_token
-    add_remember_token = Digest::SHA1.hexdigest(token_string)
+    self.token=User.new_token
+    add_remember_token = Digest::SHA1.hexdigest(token)
     self.remember_token =add_remember_token
+  end
+
+  def delete_session_token
+    update_attribute(:remember_token, nil)
   end
 end
