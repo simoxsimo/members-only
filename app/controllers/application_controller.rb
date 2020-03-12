@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  helper_method :user_logged_in?
   def remember(user)
     user.token_encrypt
     cookies.permanent.signed[:user_id] = user.id
@@ -10,8 +11,8 @@ class ApplicationController < ActionController::Base
       @current_user ||= User.find_by(id: user_id)
     elsif (user_id = cookies.signed[:user_id])
       user = User.find_by(id: user_id)
-      @current_user = user
       session[:user_id] = user.id
+      @current_user = user
     end
   end
   def forget_session(user)
@@ -23,5 +24,13 @@ class ApplicationController < ActionController::Base
     forget_session(current_user)
     session.delete(:user_id) 
     @current_user = nil 
-  end 
+  end
+
+  def user_logged_in?
+    !current_user.nil?
+  end
+
+  def logged_in_user
+    redirect_to login_path unless user_logged_in?
+  end
 end
