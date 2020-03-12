@@ -1,4 +1,4 @@
-# Re-former - Capstone Rails Projects
+# members-only - Rails Project
 
 The project consist of build an exclusive members blog in rails that protects members names to be shown to non logged in users.
 
