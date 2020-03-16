@@ -7,12 +7,12 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    if (user_id = cookies.signed[:user_id])
-      user = User.find_by(id: user_id)
-      @current_user = user
-    end
+    return unless (user_id = cookies.signed[:user_id])
+
+    user = User.find_by(id: user_id)
+    @current_user = user
   end
- 
+
   def forget_session(user)
     user.delete_session_token
     cookies.delete(:user_id)
