@@ -1,0 +1,15 @@
+<section>
+  <h1>Posts</h1>
+  
+  <div class="container">
+    <% @post.each do |p| %>
+      <div>
+        <h3><%= p.title %></h3>
+        <p><%= p.content %></p>
+        <% if user_logged_in? %>
+          <p>Posted By: <%= p.user.name%></p>
+        <% end%>
+      </div>
+    <% end %>
+  </div>
+</section>
